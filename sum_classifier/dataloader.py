@@ -47,8 +47,8 @@ def get_train_test_loader(train_kwargs, test_kwargs):
     dataset1 = datasets.MNIST(r'..\data', train=True, download=True, transform=transform)
     dataset2 = datasets.MNIST(r'..\data', train=False, download=True, transform=transform)
 
-    sum_dataset_train = SumMNIST(dataset1)
-    sum_dataset_test = SumMNIST(dataset2)
+    sum_dataset_train = SumMNIST(dataset1, im_per_epoch=60_000)
+    sum_dataset_test = SumMNIST(dataset2, im_per_epoch=10_000)
 
     train_loader = DataLoader(sum_dataset_train, **train_kwargs)
     test_loader = DataLoader(sum_dataset_test, **test_kwargs)
