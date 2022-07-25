@@ -31,7 +31,7 @@ class OpNet(nn.Module):
         embedding_im1 = self.forward_one_image(im1)
         embedding_im2 = self.forward_one_image(im2)
         # Concatenate the embeddings
-        embedding = torch.cat((embedding_im1, embedding_im2, ope), 1)
+        embedding = torch.cat((embedding_im1, embedding_im2, ope.unsqueeze(dim=1)), 1)
         # Pass the embedding through the last layer
         output = F.relu(self.concat_layer1(embedding))
         output = F.log_softmax(self.concat_layer2(output), dim=1)

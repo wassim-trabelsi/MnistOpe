@@ -6,10 +6,10 @@ import torch
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 
-from sum_classifier.train import train
-from sum_classifier.test import test
-from sum_classifier.models import SumNet
-from sum_classifier.dataloader import get_train_test_loader
+from ope_classifier.train import train
+from ope_classifier.test import test
+from ope_classifier.models import OpNet
+from ope_classifier.dataloader import get_train_test_loader
 
 
 def main():
@@ -53,7 +53,7 @@ def main():
 
     train_loader, test_loader = get_train_test_loader(train_kwargs, test_kwargs)
 
-    model = SumNet().to(device)
+    model = OpNet().to(device)
     optimizer = optim.Adadelta(model.parameters(), lr=args.lr)
 
     scheduler = StepLR(optimizer, step_size=1, gamma=args.gamma)
@@ -63,8 +63,8 @@ def main():
         scheduler.step()
 
     if args.save_model:
-        os.makedirs(r"..\weights\sum_classifier", exist_ok=True)
-        torch.save(model.state_dict(), r"..\weights\sum_classifier\mnist_cnn.pt")
+        os.makedirs(r"..\weights\op_classifier", exist_ok=True)
+        torch.save(model.state_dict(), r"..\weights\op_classifier\mnist_cnn.pt")
 
 
 if __name__ == '__main__':

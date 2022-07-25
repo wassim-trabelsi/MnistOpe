@@ -25,7 +25,7 @@ class OpMNIST(Dataset):
 
         self.sample_for_im1 = list(RandomSampler(mnist_dataset, replacement=replacement, num_samples=im_per_epoch))
         self.sample_for_im2 = list(RandomSampler(mnist_dataset, replacement=replacement, num_samples=im_per_epoch))
-        self.sample_for_op  = list([random.randint(0, 1)*2-1 for i in range(im_per_epoch)])
+        self.sample_for_op = list([random.randint(0, 1) * 2 - 1 for i in range(im_per_epoch)])
 
     def __len__(self) -> int:
         return self.im_per_epoch
@@ -38,8 +38,8 @@ class OpMNIST(Dataset):
         digit1, label1 = self.mnist_dataset[self.sample_for_im1[idx]]
         digit2, label2 = self.mnist_dataset[self.sample_for_im2[idx]]
         op = self.sample_for_op[idx]
-        result = label1 + op*label2
-        return digit1, digit2, op,  result
+        result = label1 + op * label2
+        return digit1, digit2, op, result
 
 
 def get_train_test_loader(train_kwargs, test_kwargs):
@@ -52,7 +52,7 @@ def get_train_test_loader(train_kwargs, test_kwargs):
     dataset2 = datasets.MNIST(r'..\data', train=False, download=True, transform=transform)
 
     sum_dataset_train = OpMNIST(dataset1, im_per_epoch=60_000)
-    sum_dataset_test =  OpMNIST(dataset2, im_per_epoch=10_000)
+    sum_dataset_test = OpMNIST(dataset2, im_per_epoch=10_000)
 
     train_loader = DataLoader(sum_dataset_train, **train_kwargs)
     test_loader = DataLoader(sum_dataset_test, **test_kwargs)
@@ -62,15 +62,13 @@ def get_train_test_loader(train_kwargs, test_kwargs):
 
 if __name__ == '__main__':
     train_loader, test_loader = get_train_test_loader(train_kwargs={'batch_size': 64, 'shuffle': True},
-                                                         test_kwargs={'batch_size': 64, 'shuffle': False})
+                                                      test_kwargs={'batch_size': 64, 'shuffle': False})
 
     for im1, im2, op, target in train_loader:
         # Plot of images
         im1 = im1[0]
         im2 = im2[0]
         op = op[0].item()
-        if target[0].numpy() >= 0:
-            continue
         operator = 'Sum' if op == 1 else 'Diff'
         # Subplot both of images
         fig = plt.figure(figsize=(5, 3))
