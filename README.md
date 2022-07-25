@@ -2,7 +2,22 @@
 
 The goal of this project is to create an operation network that work on Mnist Dataset.
 
+# Project goals
+
+1. Create a sum network that work on Mnist Dataset.
+
+![Example task](.github/MnistSum.png)
+
+```model(im1, im2) = im1 + im2```
+
+2. Create a general (Sum + Diff) network that work on Mnist Dataset.
+
+![Example task](.github/MnistSum.png)
+
+```model(im1, im2, ope) = ope(im1,im2) ```
+
 # Project Structure
+
 ```
 | - README.md
 | - LICENSE
@@ -45,3 +60,8 @@ The goal of this project is to create an operation network that work on Mnist Da
 |   | - ops_classifier
 |   |   | - weights.pth   (Weights for the ops classifier)
 ```
+
+# References
+
+https://arxiv.org/pdf/1912.03035.pdf
+
