@@ -3,6 +3,8 @@ import torch
 
 
 def train(args, model, device, train_loader, optimizer, epoch):
+    weight = torch.tensor([100 / min(k + 1, 19 - k) for k in range(19)])
+    weight = weight.to(device)
     model.train()
     for batch_idx, (data1, data2, target) in enumerate(train_loader):
         data1, data2, target = data1.to(device), data2.to(device), target.to(device)
@@ -10,7 +12,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
         output = model(data1, data2)
 
         # Unbalanced dataset !!
-        weight = torch.tensor([100/min(k+1, 19-k) for k in range(19)])
+
         loss = F.nll_loss(output, target, weight=weight)
 
         loss.backward()

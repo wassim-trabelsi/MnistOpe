@@ -10,6 +10,7 @@ def train(args, model, device, train_loader, optimizer, epoch):
     all_freq = sum_freq + diff_freq
     inverse_freq = 1 / all_freq
     weight = torch.tensor(inverse_freq, dtype=torch.float32)
+    weight = weight.to(device)
 
     model.train()
     for batch_idx, (data1, data2, op, target) in enumerate(train_loader):

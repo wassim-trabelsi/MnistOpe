@@ -6,10 +6,10 @@ import torch
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 
-from sum_classifier.train import train
-from sum_classifier.test import test
-from sum_classifier.models import SumNet
-from sum_classifier.dataloader import get_train_test_loader
+from train import train
+from test import test
+from models import SumNet
+from dataloader import get_train_test_loader
 
 
 def main():

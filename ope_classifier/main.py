@@ -6,10 +6,10 @@ import torch
 import torch.optim as optim
 from torch.optim.lr_scheduler import StepLR
 
-from ope_classifier.train import train
-from ope_classifier.test import test
-from ope_classifier.models import OpNet
-from ope_classifier.dataloader import get_train_test_loader
+from train import train
+from test import test
+from models import OpNet
+from dataloader import get_train_test_loader
 
 
 def main():

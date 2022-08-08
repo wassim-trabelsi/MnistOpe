@@ -12,7 +12,7 @@ The goal of this project is to create an operation network that work on Mnist Da
 
 2. Create a general (Sum + Diff) network that work on Mnist Dataset.
 
-![Example task](.github/MnistSum.png)
+![Example task](.github/MnistDiff.png)
 
 ```model(im1, im2, ope) = ope(im1,im2) ```
 
@@ -60,6 +60,70 @@ The goal of this project is to create an operation network that work on Mnist Da
 |   | - ops_classifier
 |   |   | - weights.pth   (Weights for the ops classifier)
 ```
+# Main tricks
+
+1. **Custom Dataloader** (2 images + label the sum) : dataloader.py 
+
+Each ```batch = (im1, im2, ope, label)```
+
+We shuffled mnist train dataset (60k imgs) and make sure that one epoch contains all the data once on the left side 
+and once on the right
+
+2. **Model representation**
+
+2.1 For SumNet :
+
+```model(im1, im2) = im1 + im2```
+Encoder = LeNetEncoder
+
+```embedding_dim = 128```
+
+```im1_embedding = Encoder(im1)```
+
+```im2_embedding = Encoder(im2)```
+
+then we concatenete both embedding in a simple feedforward network :
+
+```concatenation = cat(im1_embedding, im2_embedding)```
+
+``` output = LogSoftmax(Linear(256, 18))(concatenation)```
+
+2.2 For OpNet :
+
+Same thing as SumNet but with an operator :
+
+```concatenation = cat(im1_embedding, im2_embedding, ope_embedding)```
+
+with ```ope_embedding = [1] if ope = Sum and [-1] if ope = Diff```
+
+```output = LogSoftmax(Linear(concatenation, 27))```
+
+3. **Target**
+    
+```target = label + 9 for the OpNet and label for SumNet``` (We dont want to have a negative target for the OpNet)
+
+4. **Training**
+
+```Loss : nll_loss (= CrossEntropyLoss) --> We add a weight because the dataset is not balanced```
+
+For OpNet :
+
+```python
+sum_freq = np.array([0.0 for _ in range(9)] + [min(k + 1, 19 - k) / 200 for k in range(19)])
+diff_freq = np.array([(10 - abs(k)) / 200 for k in range(-9, 10)] + [0.0 for _ in range(9)])
+all_freq = sum_freq + diff_freq
+inverse_freq = 1 / all_freq
+weight = torch.tensor(inverse_freq, dtype=torch.float32)
+```
+
+Learning rate, Sheduler, and optimizer = Same as reference [Pytorch example](https://github.com/pytorch/examples/blob/00ea159a99f5cb3f3301a9bf0baa1a5089c7e217/mnist/main.py)
+
+
+# Evaluation and Performance
+
+(See evaluation.ipynb)
+
+
 
 # References
 

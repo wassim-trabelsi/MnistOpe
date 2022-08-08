@@ -11,6 +11,7 @@ def test(model, device, test_loader):
     all_freq = sum_freq + diff_freq
     inverse_freq = 1 / all_freq
     weight = torch.tensor(inverse_freq, dtype=torch.float32)
+    weight = weight.to(device)
 
     test_loss = 0
     correct = 0
